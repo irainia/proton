@@ -278,7 +278,7 @@ message InstanceSpec {
     string job_name = 4;
 
     enum Type {
-        INVALID = 0;
+        UNKNOWN = 0;
         TASK = 1;
         HOOK = 2;
     }
@@ -292,7 +292,7 @@ message InstanceSpecData {
 
     // type of data, could be an env var or file
     enum Type {
-        INVALID = 0;
+        UNKNOWN = 0;
         ENV = 1;
         FILE = 2;
     }
@@ -311,7 +311,7 @@ message JobStatus {
 
 message JobEvent {
     enum Type {
-        INVALID = 0;
+        UNKNOWN = 0;
         SLA_MISS = 1;
         FAILURE = 2;
         SUCCESS = 3;

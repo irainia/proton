@@ -1,0 +1,48 @@
+syntax = "proto3";
+package odpf.optimus.plugins;
+
+option go_package = "github.com/odpf/proton/optimus";
+option java_multiple_files = true;
+option java_package = "io.odpf.proton.optimus.plugins";
+option java_outer_classname = "TaskPluginProto";
+
+import "odpf/optimus/plugins/cli.proto";
+import "odpf/optimus/plugins/base.proto";
+import "odpf/optimus/runtime_service.proto";
+
+// TaskPlugin must be implemented by all plugins
+service TaskPlugin {
+    // GenerateDestination derive destination from config and assets
+    rpc GenerateDestination(GenerateDestination.Request) returns (GenerateDestination.Response);
+
+    // GenerateDependencies return names of job destination on which this unit
+    // is dependent on
+    rpc GenerateDependencies(GenerateDependencies.Request) returns (GenerateDependencies.Response);
+}
+
+message GenerateDestination {
+    message Request {
+        Configs task_config = 1;
+        Assets task_assets = 2;
+        ProjectSpecification project = 3;
+
+        PluginOptions options = 40;
+    }
+    message Response {
+        string destination = 1;
+        string type = 2;
+    }
+}
+
+message GenerateDependencies {
+    message Request {
+        Configs task_config = 1;
+        Assets task_assets = 2;
+        ProjectSpecification project = 3;
+
+        PluginOptions options = 40;
+    }
+    message Response {
+        repeated string dependencies = 1;
+    }
+}

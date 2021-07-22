@@ -1,0 +1,53 @@
+syntax = "proto3";
+package odpf.optimus.plugins;
+
+option go_package = "github.com/odpf/proton/optimus";
+option java_multiple_files = true;
+option java_package = "io.odpf.proton.optimus.plugins";
+option java_outer_classname = "BasePluginProto";
+
+
+// BasePlugin must be implemented by all plugins
+service BasePlugin {
+    // PluginInfo provides basic details for this plugin
+    rpc PluginInfo(PluginInfo.Request) returns (PluginInfo.Response);
+}
+
+// PluginType enumerates the type of plugins Optimus supports
+enum PluginType {
+    UNKNOWN = 0;
+    TASK = 1;
+    HOOK = 2;
+}
+
+message PluginInfo {
+    message Request {}
+    message Response {
+        string name = 1;
+        PluginType type = 2;
+
+        // plugin_version is the semver version of this individual plugin
+        string plugin_version = 3;
+        // api_versions indicates the versions of the Optimus Plugin API
+        // this plugin supports
+        repeated string api_version = 4;
+
+        string description = 5;
+        
+        // TASK
+        // docker image including version if this executes a docker image
+        string image = 10;
+
+        // HOOK
+        // name of hooks on which this should depend on before executing
+        repeated string depends_on = 20;
+
+        // Experimental
+        // will be mounted inside the container as volume
+        string secret_path = 30;
+    }
+}
+
+message PluginOptions {
+    bool dry_run = 1;
+}
